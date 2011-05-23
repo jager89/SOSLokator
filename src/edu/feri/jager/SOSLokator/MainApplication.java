@@ -6,7 +6,6 @@ import android.location.Location;
 import android.location.LocationManager;
 
 public class MainApplication extends Application {
-//	private Location location = null;
 	private LocationProvider locationProvider = null;
 	private MainActivity mainActivity = null;
 	private MyMapActivity myMapActivity = null;
@@ -19,7 +18,6 @@ public class MainApplication extends Application {
 	}
 
 	public void setCurrentLocation(Location location) {
-//		this.location = location;
 		locationProvider.setLocation(location);
 	}
 
@@ -29,7 +27,6 @@ public class MainApplication extends Application {
 
 	public Location getCurrentLocation() {
 		return locationProvider.getLocation();
-//		return location;
 	} 
 
 	public void setMyMapActivity(MyMapActivity myMapActivity) {
