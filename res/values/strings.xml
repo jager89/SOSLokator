@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, mainActivity!</string>
     <string name="app_name">SOSLokator</string>
     <string name="bu"></string>
-    <string name="buttonGetLocation">Dobi lokacijo</string>
+    <string name="buttonGetLocation">Osveži lokacijo</string>
     <string name="buttonShowOnMap">Prikaži na zemljevidu</string>
     <string name="buttonSendSMS">Pošlji sporočilo</string>
     <string name="prefrences">Nastavitve</string>
     <string name="numberList">Seznam prejemnikov</string>
     <string name="exit">Izhod</string>
     <string name="numberList2">Prejemniki</string>
+    <string name="add">Dodaj</string>
+    <string name="remove">Odstrani</string>
 </resources>

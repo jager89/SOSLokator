@@ -12,16 +12,12 @@ import com.google.android.maps.Overlay;
 import com.google.android.maps.Projection;
 
 public class MyPositionOverlay extends Overlay {
-
 	private final int mRadius = 8;
 	private Location location;
-	//	private ArrayList<Location> locations;
 
 	public MyPositionOverlay() {
 		super();
-		//		locations = new ArrayList<Location>();
 	}
-
 
 	public Location getLocation() {
 		return location;
@@ -41,7 +37,6 @@ public class MyPositionOverlay extends Overlay {
 		Projection projection = mapView.getProjection();
 
 		if ((location!=null)&&(shadow == false)) {
-			// Get the current location    
 			Double latitude = location.getLatitude()*1E6;
 			Double longitude = location.getLongitude()*1E6;
 			GeoPoint geoPoint; 

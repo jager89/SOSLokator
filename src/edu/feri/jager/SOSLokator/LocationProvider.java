@@ -11,13 +11,11 @@ public class LocationProvider {
 	private Location location = null;
 	private LocationManager locationManager = null;
 	private MainApplication app = null;
-	
+
 	private LocationListener locationListener = new LocationListener() {
 		public void onLocationChanged(Location location) {
 			if(isBetterLocation(location, app.getCurrentLocation()))
-//			app.setCurrentLocation(location);
-			LocationProvider.this.location = location;
-			
+				LocationProvider.this.location = location;
 			app.refreshLocation();
 		}
 
