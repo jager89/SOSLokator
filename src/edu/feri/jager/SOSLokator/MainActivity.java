@@ -139,16 +139,28 @@ public class MainActivity extends MapActivity {
 						Cursor phones = getContentResolver().query(Phone.CONTENT_URI, null, Phone.CONTACT_ID + " = " + vecID.get(j).getContactID(), null, null); 
 
 						while (phones.moveToNext()){ 
-							String phoneNumber = phones.getString(phones.getColumnIndex(Phone.NUMBER));   
-							vec.add(phoneNumber.replace("-", ""));
+							String phoneNumber = phones.getString(phones.getColumnIndex(Phone.NUMBER)); 
+							
+							int type = phones.getInt(phones.getColumnIndex(Phone.TYPE)); 
+							if(type == Phone.TYPE_MOBILE) {
+								System.out.println("PHONE: " + phoneNumber + "; " + type);
+								phoneNumber = phoneNumber.replace("-", "");
+								phoneNumber = phoneNumber.replace("(", "");
+								phoneNumber = phoneNumber.replace(")", "");
+								vec.add(phoneNumber);
+							}
+							
 						}  
 					}
 					if(vec.size() > 0) {
 						ProgressDialog dialog;
+						String str;
 						if(vec.size() == 1)
-							dialog = ProgressDialog.show(MainActivity.this, "", "Pošiljam Sporoèilo! Poèakajte prosim...", true);
+							str = "Pošiljam Sporoèilo! Poèakajte prosim...";
 						else
-							dialog = ProgressDialog.show(MainActivity.this, "", "Pošiljam Sporoèila! Poèakajte prosim...", true);
+							str = "Pošiljam Sporoèila! Poèakajte prosim...";
+						dialog = ProgressDialog.show(MainActivity.this, "", str, true);
+
 						int messageCount = 0;
 						for(int i  = 0; i < vec.size(); i++) {
 							try {
@@ -164,9 +176,11 @@ public class MainActivity extends MapActivity {
 						}
 						dialog.cancel();
 						if(vec.size() == 1)
-							Toast.makeText(MainActivity.this,"Sporoèilo je bilo poslano!", Toast.LENGTH_LONG).show();
+							str = "Sporoèilo je bilo poslano!";
 						else
-							Toast.makeText(MainActivity.this,"Sporoèila so bila poslana!\n(poslanih " + messageCount + " od " + vec.size() + " sporoèil)", Toast.LENGTH_LONG).show();
+							str = "Sporoèila so bila poslana!\n(poslanih " + messageCount + " od " + vec.size() + " sporoèil)";
+						Toast.makeText(MainActivity.this, str ,Toast.LENGTH_LONG).show();
+
 					}
 					else
 						Toast.makeText(MainActivity.this,"V seznamu ni kontaktov!\nDodajte kontakt",Toast.LENGTH_LONG).show();

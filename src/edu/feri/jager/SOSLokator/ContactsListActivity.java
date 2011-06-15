@@ -99,7 +99,7 @@ public class ContactsListActivity extends ListActivity implements OnItemClickLis
 		Vector<MyContacts> vec = mainApp.getVecContactsID();
 
 		if(vec.size() == 0)
-			return new String[]{"Seznam prejemnikov je prazen, dodajte prejemnika!\n(menu -> Dodaj)"};
+			return new String[]{"Seznam prejemnikov je prazen, dodajte prejemnika!"};
 
 		String[] str = new String[vec.size()];
 		for(int i = 0; i < vec.size(); i++) {

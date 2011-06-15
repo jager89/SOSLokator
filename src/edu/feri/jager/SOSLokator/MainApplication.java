@@ -69,7 +69,7 @@ public class MainApplication extends Application {
 			double lat = location.getLatitude();
 			double lng = location.getLongitude();
 			String geodata = getLocationInfo(lat, lng);
-			return text + "\n" + "Zemljepisna širina: " + zSirina + "\n" + "Zemljepisna dolžina: " + zDolzina + "\nUlica: " + geodata;
+			return text + "\n" + "Zemljepisna širina: " + zSirina + "\n" + "Zemljepisna dolžina: " + zDolzina + "\nNaslov:\n" + geodata;
 		}
 		return "N/A";
 	}
@@ -85,7 +85,7 @@ public class MainApplication extends Application {
 				Address address = addresses.get(0);
 
 				for (int i = 0; i < address.getMaxAddressLineIndex(); i++)
-					sb.append(address.getAddressLine(i)).append("\n");
+				sb.append(address.getAddressLine(i)).append("\n");
 				sb.append(address.getLocality()).append("\n");
 				sb.append(address.getPostalCode()).append("\n");
 				sb.append(address.getCountryName());
