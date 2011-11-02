@@ -14,11 +14,17 @@ import com.google.android.maps.Projection;
 public class MyPositionOverlay extends Overlay {
 	private final int mRadius = 8;
 	private Location location;
-
+	private String text = "";
 	public MyPositionOverlay() {
 		super();
+		text = "TUKAJ";
 	}
 
+	public MyPositionOverlay(String text) {
+		super();
+		this.text = text;
+	}
+	
 	public Location getLocation() {
 		return location;
 	}
@@ -61,7 +67,7 @@ public class MyPositionOverlay extends Overlay {
 
 			canvas.drawOval(oval, paint);
 			canvas.drawRoundRect(backRect, 5, 5, backPaint);
-			canvas.drawText("TUKAJ", point.x + 2 * mRadius + 2, point.y, paint);
+			canvas.drawText(text, point.x + 2 * mRadius + 2, point.y, paint);
 		}
 		super.draw(canvas, mapView, shadow);
 	}

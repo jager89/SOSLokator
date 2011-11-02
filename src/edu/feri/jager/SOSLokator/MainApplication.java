@@ -24,6 +24,7 @@ public class MainApplication extends Application {
 	private MainActivity mainActivity = null;
 	private Vector<MyContacts> vecContactsID = null;
 	private DBAdapterContacts db1 = null;
+	private SOSMessage currentSOSMessage = null;
 
 	public void onCreate() {
 		super.onCreate();
@@ -36,6 +37,14 @@ public class MainApplication extends Application {
 
 	}
 
+	public SOSMessage getCurrentSOSMessage() {
+		return currentSOSMessage;
+	}
+
+	public void setCurrentSOSMessage(SOSMessage currentSOSMessage) {
+		this.currentSOSMessage = currentSOSMessage;
+	}
+	
 	public void setCurrentLocation(Location location) {
 		locationProvider.setLocation(location);
 	}
@@ -69,7 +78,7 @@ public class MainApplication extends Application {
 			double lat = location.getLatitude();
 			double lng = location.getLongitude();
 			String geodata = getLocationInfo(lat, lng);
-			return text + "\n" + "Zemljepisna širina: " + zSirina + "\n" + "Zemljepisna dolžina: " + zDolzina + "\nNaslov:\n" + geodata;
+			return text + "\n" + "Zemljepisna širina: " + zSirina + " [" + location.getLatitude() +"]\n" + "Zemljepisna dolžina: " + zDolzina + " [" + location.getLongitude() +"]\n" + "Naslov:\n" + geodata;
 		}
 		return "N/A";
 	}

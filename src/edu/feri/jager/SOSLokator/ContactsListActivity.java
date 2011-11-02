@@ -67,7 +67,6 @@ public class ContactsListActivity extends ListActivity implements OnItemClickLis
 				.setMessage("Ali ste preprièani, da želite odstraniti kontakt?")
 				.setPositiveButton("Da", new DialogInterface.OnClickListener() {
 
-					@Override
 					public void onClick(DialogInterface dialog, int which) {
 
 						mainApp.remove(mainApp.getVecContactsID().get(lastSelectedItem).getId());
@@ -113,7 +112,6 @@ public class ContactsListActivity extends ListActivity implements OnItemClickLis
 		return str;
 	}
 
-	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		System.out.println("CLICK");
 		if(mainApp.getVecContactsID().size() == 0) {
