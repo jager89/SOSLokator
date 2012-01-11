@@ -22,7 +22,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class ContactsListActivity extends ListActivity implements OnItemClickListener{
+public class ContactsListActivity extends ListActivity implements OnItemClickListener {
 	private static final int CONTACTS_REQ = 123;
 	MainApplication mainApp;
 	Menu mMenu;
@@ -117,8 +117,7 @@ public class ContactsListActivity extends ListActivity implements OnItemClickLis
 		if(mainApp.getVecContactsID().size() == 0) {
 			Intent intent = new Intent(Intent.ACTION_PICK, Contacts.CONTENT_URI);
 			startActivityForResult(intent, CONTACTS_REQ);
-		}
-		else {	
+		} else {	
 			if (lastSelectedView != null) {
 				lastSelectedView.setBackgroundColor(Color.BLACK);
 			}
@@ -142,7 +141,7 @@ public class ContactsListActivity extends ListActivity implements OnItemClickLis
 		}
 	}
 
-	private void addContact(Uri uri){
+	private void addContact(Uri uri) {
 		Cursor cursor = getContentResolver().query(uri, null, null, null, null);
 		if(cursor.moveToFirst()) {
 			boolean exists = false;

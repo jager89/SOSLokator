@@ -5,11 +5,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 
+/**
+ * @author Jager
+ *
+ */
 public class SplashScreenActivity extends Activity {
 
-	//how long until we go to the next activity
-	protected int _splashTime = 5000; 
+	/**
+	 */
+	private final int SPLASH_TIME = new Integer(5000);
 
+	/**
+	 */
 	private Thread splashTread;
 
 	/** Called when the activity is first created. */
@@ -25,14 +32,13 @@ public class SplashScreenActivity extends Activity {
 	        @Override
 	        public void run() {
 	            try {
-	            	synchronized(this){
+	            	synchronized(this) {
 
 	            		//wait 5 sec
-	            		wait(_splashTime);
+	            		wait(SPLASH_TIME);
 	            	}
 
-	            } catch(InterruptedException e) {}
-	            finally {
+	            } catch (InterruptedException e) { } finally {
 	                finish();
 
 	                //start a new activity
@@ -52,7 +58,7 @@ public class SplashScreenActivity extends Activity {
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 	    if (event.getAction() == MotionEvent.ACTION_DOWN) {
-	    	synchronized(splashTread){
+	    	synchronized(splashTread) {
 	    		splashTread.notifyAll();
 	    	}
 	    }

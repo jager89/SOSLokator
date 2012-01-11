@@ -20,6 +20,7 @@ import android.view.View;
 public class MainApplication extends Application {
 	public static final String PREFS_NAME = "PrefrencesFile";
 
+	private final int VALUE = 60; 
 	private LocationProvider locationProvider = null;
 	private MainActivity mainActivity = null;
 	private Vector<MyContacts> vecContactsID = null;
@@ -78,7 +79,7 @@ public class MainApplication extends Application {
 			double lat = location.getLatitude();
 			double lng = location.getLongitude();
 			String geodata = getLocationInfo(lat, lng);
-			return text + "\n" + "Zemljepisna širina: " + zSirina + " [" + location.getLatitude() +"]\n" + "Zemljepisna dolžina: " + zDolzina + " [" + location.getLongitude() +"]\n" + "Naslov:\n" + geodata;
+			return text + "\n" + "Zemljepisna širina: " + zSirina + " [" + location.getLatitude() + "]\n" + "Zemljepisna dolžina: " + zDolzina + " [" + location.getLongitude() + "]\n" + "Naslov:\n" + geodata;
 		}
 		return "N/A";
 	}
@@ -110,9 +111,9 @@ public class MainApplication extends Application {
 	private String convertDoubleToDegreesMinutesSeconds(double value) {
 		int degrees = (int) value;
 		value = Math.abs(value);
-		value = (value - (int) value) * 60; 
+		value = (value - (int) value) * VALUE; 
 		int minutes = (int) value;
-		value = (value - (int) value) * 60; 
+		value = (value - (int) value) * VALUE; 
 		int seconds = (int) value;
 
 		return degrees + "° " + minutes + "' " + seconds + "\"";
@@ -151,7 +152,7 @@ public class MainApplication extends Application {
 		for(int i = 0; i < vecContactsID.size(); i++) {
 			Cursor phones = getContentResolver().query(Phone.CONTENT_URI, null, Phone.CONTACT_ID + " = " +  vecContactsID.get(i).getContactID(), null, null); 
 			if(phones != null && !phones.moveToFirst()) {
-				db1.deleteContact( vecContactsID.get(i).getId());
+				db1.deleteContact(vecContactsID.get(i).getId());
 				vecContactsID.remove(i);
 			}
 		}

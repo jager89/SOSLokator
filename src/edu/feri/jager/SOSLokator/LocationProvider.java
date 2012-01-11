@@ -7,6 +7,8 @@ import android.location.LocationManager;
 import android.os.Bundle;
 
 public class LocationProvider {
+	private final int MIN_DISTANCE = 10;
+	private final int MIN_TIME = 2000;
 	private static final int TWO_MINUTES = 1000 * 60 * 2;
 	private Location location = null;
 	private LocationManager locationManager = null;
@@ -43,7 +45,7 @@ public class LocationProvider {
 			Location location = locationManager.getLastKnownLocation(provider);
 			if(location != null)
 				app.setCurrentLocation(location);
-			locationManager.requestLocationUpdates(provider, 2000, 10, locationListener);
+			locationManager.requestLocationUpdates(provider, MIN_TIME, MIN_DISTANCE, locationListener);
 		}
 
 	}

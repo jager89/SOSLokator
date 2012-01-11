@@ -19,12 +19,15 @@ public class MyPositionOverlay extends Overlay {
 		super();
 		text = "TUKAJ";
 	}
-
-	public MyPositionOverlay(String text) {
+/**
+ * @author Jager
+ * @param text1
+ */
+	public MyPositionOverlay(final String text1) {
 		super();
-		this.text = text;
+		this.text = text1;
 	}
-	
+
 	public Location getLocation() {
 		return location;
 	}
@@ -42,12 +45,12 @@ public class MyPositionOverlay extends Overlay {
 	public void draw(Canvas canvas, MapView mapView, boolean shadow) {
 		Projection projection = mapView.getProjection();
 
-		if ((location!=null)&&(shadow == false)) {
-			Double latitude = location.getLatitude()*1E6;
-			Double longitude = location.getLongitude()*1E6;
+		if ((location != null) && (shadow == false)) {
+			Double latitude = location.getLatitude() * 1E6;
+			Double longitude = location.getLongitude() * 1E6;
 			GeoPoint geoPoint; 
 			geoPoint = new 
-			GeoPoint(latitude.intValue(),longitude.intValue());
+			GeoPoint(latitude.intValue(), longitude.intValue());
 
 			Point point = new Point();
 			projection.toPixels(geoPoint, point);

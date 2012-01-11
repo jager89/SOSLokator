@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends MapActivity {
+	private final int ZOOM = 15;
 	private Button buttonGetLocation = null;
 	private Button buttonSendSMS = null;
 	private TextView textViewLocation = null;
@@ -39,7 +40,7 @@ public class MainActivity extends MapActivity {
 			mapView = (MapView) findViewById(R.id.mapView);
 			mapView.setBuiltInZoomControls(true);
 			mapController = mapView.getController();
-			mapController.setZoom(15);
+			mapController.setZoom(ZOOM);
 			mapView.setSatellite(true);
 			mapView.setStreetView(true);
 			mapView.displayZoomControls(true);
@@ -81,7 +82,7 @@ public class MainActivity extends MapActivity {
 			return true;
 		case R.id.numberList:
 			System.out.println("PREJEMNIKI BUTTON");
-			startActivity(new Intent(this,ContactsListActivity.class));
+			startActivity(new Intent(this, ContactsListActivity.class));
 			return true;
 			//		case R.id.prefrences:
 			//			System.out.println("NASTAVITVE BUTTON");
@@ -100,7 +101,7 @@ public class MainActivity extends MapActivity {
 
 	public TextView getTextViewLocation() {
 		if(textViewLocation == null) {
-			textViewLocation = (TextView)findViewById(R.id.textViewLocation);
+			textViewLocation = (TextView) findViewById(R.id.textViewLocation);
 			textViewLocation.setText("Pridobivam podatke o lokaciji...");
 			if(mainApp.getCurrentLocation() !=  null) {
 				textViewLocation.setText(mainApp.LocationToString("Zadnja znana lokacija:"));
@@ -138,7 +139,7 @@ public class MainActivity extends MapActivity {
 					for(int j = 0; j < vecID.size(); j++) {
 						Cursor phones = getContentResolver().query(Phone.CONTENT_URI, null, Phone.CONTACT_ID + " = " + vecID.get(j).getContactID(), null, null); 
 
-						while (phones.moveToNext()){ 
+						while (phones.moveToNext()) { 
 							String phoneNumber = phones.getString(phones.getColumnIndex(Phone.NUMBER)); 
 							
 							int type = phones.getInt(phones.getColumnIndex(Phone.TYPE)); 
@@ -170,7 +171,7 @@ public class MainActivity extends MapActivity {
 								messageCount++;
 							} catch (Exception e) {
 								e.printStackTrace();
-									Toast.makeText(MainActivity.this,"Napaka pri pošiljanju!\n" + (messageCount + 1) + ". sporoèilo ni bilo poslano!\n(prejemnik: " + vec.get(i) + ")",Toast.LENGTH_LONG).show();
+									Toast.makeText(MainActivity.this, "Napaka pri pošiljanju!\n" + (messageCount + 1) + ". sporoèilo ni bilo poslano!\n(prejemnik: " + vec.get(i) + ")", Toast.LENGTH_LONG).show();
 							}
 							System.out.println("SMS " + i + " SENDED!!!");
 						}
@@ -179,11 +180,10 @@ public class MainActivity extends MapActivity {
 							str = "Sporoèilo je bilo poslano!";
 						else
 							str = "Sporoèila so bila poslana!\n(poslanih " + messageCount + " od " + vec.size() + " sporoèil)";
-						Toast.makeText(MainActivity.this, str ,Toast.LENGTH_LONG).show();
+						Toast.makeText(MainActivity.this, str , Toast.LENGTH_LONG).show();
 
-					}
-					else
-						Toast.makeText(MainActivity.this,"V seznamu ni kontaktov!\nDodajte kontakt",Toast.LENGTH_LONG).show();
+					} else
+						Toast.makeText(MainActivity.this, "V seznamu ni kontaktov!\nDodajte kontakt", Toast.LENGTH_LONG).show();
 				}
 			});
 		}
@@ -194,8 +194,8 @@ public class MainActivity extends MapActivity {
 		if(location != null && positionOverlay != null && mapController != null) {
 			positionOverlay.setLocation(location);
 
-			Double geoLat = location.getLatitude()*1E6;
-			Double geoLng = location.getLongitude()*1E6;
+			Double geoLat = location.getLatitude() * 1E6;
+			Double geoLng = location.getLongitude() * 1E6;
 
 			mapController.animateTo(new GeoPoint(geoLat.intValue(), geoLng.intValue()));
 		}

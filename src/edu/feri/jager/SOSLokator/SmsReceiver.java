@@ -6,15 +6,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
 
-public class SmsReceiver extends BroadcastReceiver 
-{
+public class SmsReceiver extends BroadcastReceiver {
 	private static final String SOS_MESSAGE_CONTENT = "SOS!!! Moja trenutna lokacija:";
 	private static final String SOS_GEOWIDTH_CONTENT = "Zemljepisna sirina:";
 	private static final String SOS_GEOHEIGHT_CONTENT = "Zemljepisna dolzina:";
 	private static final String SOS_ADRESS_CONTENT = "Naslov:\n";
 
-	public void onReceive( Context context, Intent intent ) 
-	{
+	public void onReceive(Context context, Intent intent) {
 
 		Bundle bundle = intent.getExtras();
 
@@ -43,10 +41,15 @@ public class SmsReceiver extends BroadcastReceiver
 
 //			this.abortBroadcast();
 
-			Intent i = new Intent(context, SearchActivity.class);  
-			i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);  
-			i.putExtra("smsData", sosMessage.getArray());
-			context.startActivity(i);  
+			try {
+				Intent i = new Intent(context, SearchActivity.class);  
+				i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);  
+				i.putExtra("smsData", sosMessage.getArray());
+				context.startActivity(i); 
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			 
 		}
 	}
 
