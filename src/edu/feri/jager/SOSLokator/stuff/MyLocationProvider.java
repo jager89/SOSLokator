@@ -1,12 +1,13 @@
-package edu.feri.jager.SOSLokator;
+package edu.feri.jager.SOSLokator.stuff;
 
+import edu.feri.jager.SOSLokator.MainApplication;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 
-public class LocationProvider {
+public class MyLocationProvider {
 	private final int MIN_DISTANCE = 10;
 	private final int MIN_TIME = 2000;
 	private static final int TWO_MINUTES = 1000 * 60 * 2;
@@ -17,7 +18,7 @@ public class LocationProvider {
 	private LocationListener locationListener = new LocationListener() {
 		public void onLocationChanged(Location location) {
 			if(isBetterLocation(location, app.getCurrentLocation()))
-				LocationProvider.this.location = location;
+				MyLocationProvider.this.location = location;
 			app.refreshLocation();
 		}
 
@@ -34,7 +35,7 @@ public class LocationProvider {
 		}
 	};
 
-	public LocationProvider(MainApplication app, LocationManager locationManager) {
+	public MyLocationProvider(MainApplication app, LocationManager locationManager) {
 		this.app = app;
 		this.locationManager = locationManager;
 	}

@@ -1,4 +1,4 @@
-package edu.feri.jager.SOSLokator;
+package edu.feri.jager.SOSLokator.structures;
 
 public class MyContacts {
 	private String contactID;
@@ -8,9 +8,21 @@ public class MyContacts {
 		this.contactID = "N/A";
 		this.id = -1;
 	}
+	
 	public MyContacts(String contactID) {
 		this.contactID = contactID;
 		this.id = -1;
+	}
+	
+	public boolean equals(MyContacts contacts) {
+		if(!contactID.equalsIgnoreCase(contacts.getContactID())) {
+			return false;
+		}
+		if(id != contacts.getId()) {
+			return false;
+		}
+		
+		return true;
 	}
 
 	public void setId(long id) {

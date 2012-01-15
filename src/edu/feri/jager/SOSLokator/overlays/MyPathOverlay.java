@@ -1,4 +1,4 @@
-package edu.feri.jager.SOSLokator;
+package edu.feri.jager.SOSLokator.overlays;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -9,7 +9,7 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.Projection;
 
-public class PathOverlay extends Overlay {
+public class MyPathOverlay extends Overlay {
 
 	private final int MIN_STROKE_WIDTH = new Integer(1);
 	private final int MAX_STROKE_WIDTH = new Integer(4);
@@ -20,7 +20,7 @@ public class PathOverlay extends Overlay {
 	private GeoPoint endPoint;
 	private Paint paint;
 
-	public PathOverlay(GeoPoint startPoint, GeoPoint endPoint, int color, 
+	public MyPathOverlay(GeoPoint startPoint, GeoPoint endPoint, int color, 
 			int strokeWidth) {
 		setPixelStartPoint(new Point());
 		setPixelEndPoint(new Point());

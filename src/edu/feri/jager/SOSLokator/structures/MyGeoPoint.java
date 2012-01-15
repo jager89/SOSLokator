@@ -1,22 +1,33 @@
-package edu.feri.jager.SOSLokator;
+package edu.feri.jager.SOSLokator.structures;
 
 import java.text.DecimalFormat;
 
-public class GeoPoint {
+public class MyGeoPoint {
 	private double latitude;
 	private double longitude;
 	private DecimalFormat decimalFormat = null;
 
-	public GeoPoint() {
+	public MyGeoPoint() {
 		this.latitude = new Double(0.0);
 		this.longitude = new Double(0.0);
 		this.decimalFormat = new DecimalFormat("0.000000");
 	}
 	
-	public GeoPoint(double latitude, double longitude) {
+	public MyGeoPoint(double latitude, double longitude) {
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.decimalFormat = new DecimalFormat("0.000000");
+	}
+	
+	public boolean equals(MyGeoPoint point) {
+		if(latitude != point.getLatitude()) {
+			return false;
+		}
+		if(longitude != point.getLongitude()) {
+			return false;
+		}
+		
+		return true;
 	}
 	
 	public double getLatitude() {

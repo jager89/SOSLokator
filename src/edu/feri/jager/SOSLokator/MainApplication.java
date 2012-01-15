@@ -1,11 +1,17 @@
 package edu.feri.jager.SOSLokator;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Vector;
 
-import edu.feri.jager.SOSLokator.database.DBAdapterContacts;
+import edu.feri.jager.SOSLokator.databases.ContactsDBAdapter;
+import edu.feri.jager.SOSLokator.databases.LocationsDBAdapter;
+import edu.feri.jager.SOSLokator.structures.MyContacts;
+import edu.feri.jager.SOSLokator.structures.MyLocation;
+import edu.feri.jager.SOSLokator.structures.MySOSMessage;
+import edu.feri.jager.SOSLokator.stuff.MyLocationProvider;
 
 import android.app.Application;
 import android.content.Context;
@@ -21,28 +27,33 @@ public class MainApplication extends Application {
 	public static final String PREFS_NAME = "PrefrencesFile";
 
 	private final int VALUE = 60; 
-	private LocationProvider locationProvider = null;
+	private MyLocationProvider locationProvider = null;
 	private MainActivity mainActivity = null;
-	private Vector<MyContacts> vecContactsID = null;
-	private DBAdapterContacts db1 = null;
-	private SOSMessage currentSOSMessage = null;
-
+	private List<MyContacts> listContactsID = null;
+	private List<MyLocation> listLocations = null;
+	private ContactsDBAdapter dbContacts = null;
+	private LocationsDBAdapter dbLocation = null;
+	private MySOSMessage currentSOSMessage = null;
+	private int widgetCounter;
+	
 	public void onCreate() {
 		super.onCreate();
-		locationProvider = new LocationProvider(this, (LocationManager) this.getSystemService(Context.LOCATION_SERVICE));
-		setVecContactsID(new Vector<MyContacts>());
-		db1 = new DBAdapterContacts(this);
+		locationProvider = new MyLocationProvider(this, (LocationManager) this.getSystemService(Context.LOCATION_SERVICE));
+		setListContactsID(new Vector<MyContacts>());
+		dbContacts = new ContactsDBAdapter(this);
+		setDbLocation(new LocationsDBAdapter(this));
+		
 //		fillFromDBRezultati();
 
 		requestLocation();
 
 	}
 
-	public SOSMessage getCurrentSOSMessage() {
+	public MySOSMessage getCurrentSOSMessage() {
 		return currentSOSMessage;
 	}
 
-	public void setCurrentSOSMessage(SOSMessage currentSOSMessage) {
+	public void setCurrentSOSMessage(MySOSMessage currentSOSMessage) {
 		this.currentSOSMessage = currentSOSMessage;
 	}
 	
@@ -79,7 +90,8 @@ public class MainApplication extends Application {
 			double lat = location.getLatitude();
 			double lng = location.getLongitude();
 			String geodata = getLocationInfo(lat, lng);
-			return text + "\n" + "Zemljepisna širina: " + zSirina + " [" + location.getLatitude() + "]\n" + "Zemljepisna dolžina: " + zDolzina + " [" + location.getLongitude() + "]\n" + "Naslov:\n" + geodata;
+			return text + "\n" + "Zemljepisna širina: " + zSirina + "\n" + "Zemljepisna dolžina:" + zDolzina + "\n" + "Naslov:\n" + geodata +
+					"\n<data>" + location.getLatitude() + " " + location.getLongitude() + "</div>";
 		}
 		return "N/A";
 	}
@@ -119,55 +131,118 @@ public class MainApplication extends Application {
 		return degrees + "° " + minutes + "' " + seconds + "\"";
 	}
 
-	public void setVecContactsID(Vector<MyContacts> vecContactsID) {
-		this.vecContactsID = vecContactsID;
-	}
-
-	public Vector<MyContacts> getVecContactsID() {
-		return vecContactsID;
-	}
-
-	public void setDb1(DBAdapterContacts db1) {
-		this.db1 = db1;
-	}
-
-	public DBAdapterContacts getDb1() {
-		return db1;
-	}
-
-
-	public void fillFromDBRezultati() {
-		vecContactsID = new Vector<MyContacts>();
-		db1.open();
-		Cursor c = db1.getAll();
+	public void fillContactsFromDB() {
+		listContactsID = new Vector<MyContacts>();
+		dbContacts.open();
+		Cursor c = dbContacts.getAll();
 		MyContacts tmp;
 		for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
 			tmp = new MyContacts();
-			tmp.setContactID(c.getString(DBAdapterContacts.POS_CONTACT_ID));
-			tmp.setId(c.getLong(DBAdapterContacts.POS__ID));
-			vecContactsID.add(tmp); 
+			tmp.setContactID(c.getString(ContactsDBAdapter.POS_CONTACT_ID));
+			tmp.setId(c.getLong(ContactsDBAdapter.POS__ID));
+			listContactsID.add(tmp); 
 		}
 		c.close();
 
-		for(int i = 0; i < vecContactsID.size(); i++) {
-			Cursor phones = getContentResolver().query(Phone.CONTENT_URI, null, Phone.CONTACT_ID + " = " +  vecContactsID.get(i).getContactID(), null, null); 
+		for(int i = 0; i < listContactsID.size(); i++) {
+			Cursor phones = getContentResolver().query(Phone.CONTENT_URI, null, Phone.CONTACT_ID + " = " +  listContactsID.get(i).getContactID(), null, null); 
 			if(phones != null && !phones.moveToFirst()) {
-				db1.deleteContact(vecContactsID.get(i).getId());
-				vecContactsID.remove(i);
+				dbContacts.deleteContact(listContactsID.get(i).getId());
+				listContactsID.remove(i);
 			}
 		}
-		db1.close();
+		dbContacts.close();
 
 	}
-	public void addDBRezultat(MyContacts s) {
-		db1.open();
-		s.setId(db1.insertContact(s));
-		db1.close();	
+	
+	public void addContactToDB(MyContacts s) {
+		dbContacts.open();
+		s.setId(dbContacts.insertContact(s));
+		dbContacts.close();	
 	}
 
-	public void remove(long id) {
-		db1.open();
-		db1.deleteContact(id);
-		db1.close();
+	public void removeContactFromDB(long id) {
+		dbContacts.open();
+		dbContacts.deleteContact(id);
+		dbContacts.close();
+	}
+	
+	public void setDbContatcs(ContactsDBAdapter db1) {
+		this.dbContacts = db1;
+	}
+
+	public ContactsDBAdapter getDbContatcs() {
+		return dbContacts;
+	}
+
+	public void setListContactsID(List<MyContacts> listContactsID) {
+		this.listContactsID = listContactsID;
+	}
+
+	public List<MyContacts> getListContactsID() {
+		return listContactsID;
+	}
+	
+
+	public void fillLocationsFromDB() {
+		listLocations = new ArrayList<MyLocation>();
+		dbLocation.open();
+		Cursor c = dbLocation.getAll();
+		MyLocation location;
+		for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
+			location = new MyLocation();
+			location.setPhoneNumber(c.getString(LocationsDBAdapter.POS_PHONE_NUMBER));
+			location.setDisplayName(c.getString(LocationsDBAdapter.POS_DISPLAY_NAME));
+			location.setLongitude(c.getString(LocationsDBAdapter.POS_LONGITUDE));
+			location.setLatitude(c.getString(LocationsDBAdapter.POS_LATITUDE));
+			location.setTimestamp(c.getString(LocationsDBAdapter.POS_TIMESTAMP));
+			location.setId(c.getLong(LocationsDBAdapter.POS__ID));
+			listLocations.add(location); 
+		}
+		c.close();
+
+		List<MyLocation> tempList = new ArrayList<MyLocation>();
+		for(int i = listLocations.size() - 1; i >= 0; i--) {
+			tempList.add(listLocations.get(i));
+		}
+		setListLocations(tempList);
+		
+		dbLocation.close();
+	}
+	public void addLocationToDB(MyLocation s) {
+		dbLocation.open();
+		s.setId(dbLocation.insertContact(s));
+		dbLocation.close();	
+	}
+	
+	public void removeLocationFromDB(long id) {
+		dbLocation.open();
+		dbLocation.deleteContact(id);
+		dbLocation.close();
+	}
+	
+
+	public LocationsDBAdapter getDbLocation() {
+		return dbLocation;
+	}
+
+	public void setDbLocation(LocationsDBAdapter dbLocation) {
+		this.dbLocation = dbLocation;
+	}
+
+	public List<MyLocation> getListLocations() {
+		return listLocations;
+	}
+
+	public void setListLocations(List<MyLocation> listLocations) {
+		this.listLocations = listLocations;
+	}
+
+	public int getWidgetCounter() {
+		return widgetCounter;
+	}
+
+	public void setWidgetCounter(int widgetCounter) {
+		this.widgetCounter = widgetCounter;
 	}
 }

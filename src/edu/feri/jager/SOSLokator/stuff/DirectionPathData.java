@@ -1,18 +1,21 @@
-package edu.feri.jager.SOSLokator;
+package edu.feri.jager.SOSLokator.stuff;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import edu.feri.jager.SOSLokator.structures.MyGeoPoint;
 
 /**
  * Razred DirectionPathData pošlje zahtevo na eno izmed spletnih storitev google maps, 
@@ -32,7 +35,7 @@ public class DirectionPathData {
 
 	
 	
-	public Vector<Vector<GeoPoint>> getDirectionData(GeoPoint startPoint, GeoPoint endPoint) {
+	public List<List<MyGeoPoint>> getDirectionData(MyGeoPoint startPoint, MyGeoPoint endPoint) {
 		try {
 			URL url = new URL(parseUrl(startPoint, endPoint));
 			InputStream inputStream = getURLStream(url);
@@ -44,9 +47,9 @@ public class DirectionPathData {
 				Document document = documentBuilder.parse(inputStream);
 
 				NodeList lineStringNodelist = document.getElementsByTagName(DATA_TAG);
-				StringBuilder[][] data = new StringBuilder[lineStringNodelist.getLength()][];
+//				StringBuilder[][] data = new StringBuilder[lineStringNodelist.getLength()][];
 
-				Vector<Vector<GeoPoint>> vecDirr = new Vector<Vector<GeoPoint>>();
+				List<List<MyGeoPoint>> listDirr = new ArrayList<List<MyGeoPoint>>();
 				
 				for (int i = 0; i < lineStringNodelist.getLength(); i++) {
 					Node lineStringNode = lineStringNodelist.item(i);
@@ -59,7 +62,7 @@ public class DirectionPathData {
 						NodeList value = coordinatesNode.getChildNodes();
 //						data[i] = parseText(value.item(0).getNodeValue());
 						
-						vecDirr.add(parseText(value.item(0).getNodeValue()));
+						listDirr.add(parseText(value.item(0).getNodeValue()));
 
 //
 //						for(StringBuilder coordinates : pairs) {
@@ -74,7 +77,7 @@ public class DirectionPathData {
 				}
 //				return data;
 
-				return vecDirr;
+				return listDirr;
 //			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -145,11 +148,11 @@ public class DirectionPathData {
 	 * @param text
 	 * @return
 	 */
-	private Vector<GeoPoint> parseText(String text) {
+	private List<MyGeoPoint> parseText(String text) {
 		String[] pairs = text.split(PAIR_SEPERATOR);
 		StringBuilder[] coordinates = new StringBuilder[pairs.length];
 		
-		Vector<GeoPoint> vecPairs = new Vector<GeoPoint>();
+		List<MyGeoPoint> vecPairs = new ArrayList<MyGeoPoint>();
 
 		int pos = 0;
 		
@@ -157,7 +160,7 @@ public class DirectionPathData {
 			
 			String[] coord = pair.split(COORD_SPERATOR);
 			
-			vecPairs.add(new GeoPoint(new Double(coord[1]), new Double(coord[0])));
+			vecPairs.add(new MyGeoPoint(new Double(coord[1]), new Double(coord[0])));
 			
 			StringBuilder stringBuilder = new StringBuilder(coord[1]);
 			stringBuilder.append(COORD_SPERATOR);
@@ -225,7 +228,7 @@ public class DirectionPathData {
 	 * @param endLongitude
 	 * @return
 	 */
-	private String parseUrl(GeoPoint startPoint, GeoPoint endPoint) {
+	private String parseUrl(MyGeoPoint startPoint, MyGeoPoint endPoint) {
 		StringBuilder stringBuilder = new StringBuilder();
 
 		stringBuilder.append(URL_START);
@@ -243,7 +246,7 @@ public class DirectionPathData {
 	 * @param longitude
 	 * @return
 	 */
-	private StringBuilder parseCoordinates(GeoPoint geoPoint) {
+	private StringBuilder parseCoordinates(MyGeoPoint geoPoint) {
 		StringBuilder stringBuilder = new StringBuilder();
 
 		stringBuilder.append(geoPoint.getLatitude());

@@ -3,7 +3,7 @@ package edu.feri.jager.SOSLokator;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
-public class PreferencesMenu  extends PreferenceActivity {
+public class MyPreferenceActivity  extends PreferenceActivity {
 	public static final String TAG = "MenuPreferences";
 	//	SharedPreferences prefs;
 	//	ApplicationExample app;

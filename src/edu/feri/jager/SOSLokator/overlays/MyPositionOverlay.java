@@ -1,4 +1,4 @@
-package edu.feri.jager.SOSLokator;
+package edu.feri.jager.SOSLokator.overlays;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;

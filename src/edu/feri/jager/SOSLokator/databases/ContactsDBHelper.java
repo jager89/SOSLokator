@@ -1,17 +1,17 @@
-package edu.feri.jager.SOSLokator.database;
+package edu.feri.jager.SOSLokator.databases;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public  class DatabaseHelper extends SQLiteOpenHelper {	
+public  class ContactsDBHelper extends SQLiteOpenHelper {	
 	private static final int DATABASE_VERSION = 2;
 	private static final String DATABASE_NAME = "db_contactsID";
 	private static final String DATABASE_CREATE =
-		"create table " + DBAdapterContacts.TABLE + " (" + DBAdapterContacts._ID + " integer primary key autoincrement, "
-		+ DBAdapterContacts.CONTACT_ID + " TEXT not null);";
+		"create table " + ContactsDBAdapter.TABLE + " (" + ContactsDBAdapter._ID + " integer primary key autoincrement, "
+		+ ContactsDBAdapter.CONTACT_ID + " TEXT not null);";
 
-	DatabaseHelper(Context context) {
+	ContactsDBHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 
@@ -22,7 +22,7 @@ public  class DatabaseHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		db.execSQL("DROP TABLE IF EXISTS " + DBAdapterContacts.TABLE);
+		db.execSQL("DROP TABLE IF EXISTS " + ContactsDBAdapter.TABLE);
 		onCreate(db);
 	}
 }

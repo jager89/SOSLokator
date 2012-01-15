@@ -9,6 +9,10 @@ import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 
+import edu.feri.jager.SOSLokator.overlays.MyPositionOverlay;
+import edu.feri.jager.SOSLokator.services.MyAsyncTask;
+import edu.feri.jager.SOSLokator.structures.MyContacts;
+
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
@@ -45,7 +49,7 @@ public class MainActivity extends MapActivity {
 			mapView.setStreetView(true);
 			mapView.displayZoomControls(true);
 
-			overlays = getMapView().getOverlays();
+			overlays = mapView.getOverlays();
 			overlays.add(positionOverlay = new MyPositionOverlay());
 		}
 		return mapView;
@@ -61,8 +65,11 @@ public class MainActivity extends MapActivity {
 		getTextViewLocation();
 		getButtonGetLocation();
 		getButtonSendSMS();
+		
 		getMapView();
+//		(new MyAsyncTask(this, new ProgressDialog(this))).execute();
 
+		
 		if(mainApp.getCurrentLocation() != null)
 			setNewPoint(mainApp.getCurrentLocation());
 	}
@@ -70,7 +77,7 @@ public class MainActivity extends MapActivity {
 	@Override
 	public void onStart() {
 		super.onStart();
-		mainApp.fillFromDBRezultati();
+		mainApp.fillContactsFromDB();
 	}
 
 	@Override
@@ -82,7 +89,7 @@ public class MainActivity extends MapActivity {
 			return true;
 		case R.id.numberList:
 			System.out.println("PREJEMNIKI BUTTON");
-			startActivity(new Intent(this, ContactsListActivity.class));
+			startActivity(new Intent(this, ContactsActivity.class));
 			return true;
 			//		case R.id.prefrences:
 			//			System.out.println("NASTAVITVE BUTTON");
@@ -133,7 +140,7 @@ public class MainActivity extends MapActivity {
 			buttonSendSMS.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
 					System.out.println("BUTTON SEND_SMS CLICK!!!");
-					Vector<edu.feri.jager.SOSLokator.MyContacts> vecID = mainApp.getVecContactsID();
+					List<MyContacts> vecID = mainApp.getListContactsID();
 
 					Vector<String> vec = new Vector<String>();
 					for(int j = 0; j < vecID.size(); j++) {

@@ -1,6 +1,9 @@
 package edu.feri.jager.SOSLokator;
 
-import java.util.Vector;
+import java.util.List;
+
+import edu.feri.jager.SOSLokator.structures.MyContacts;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -22,7 +25,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class ContactsListActivity extends ListActivity implements OnItemClickListener {
+public class ContactsActivity extends ListActivity implements OnItemClickListener {
 	private static final int CONTACTS_REQ = 123;
 	MainApplication mainApp;
 	Menu mMenu;
@@ -59,7 +62,7 @@ public class ContactsListActivity extends ListActivity implements OnItemClickLis
 		switch (item.getItemId()) {
 		case R.id.delete:
 			System.out.println("DELETE BUTTON");
-			if(lastSelectedItem != -1 && mainApp.getVecContactsID().size() > 0) {
+			if(lastSelectedItem != -1 && mainApp.getListContactsID().size() > 0) {
 
 				new AlertDialog.Builder(this)
 				.setIcon(android.R.drawable.ic_dialog_alert)
@@ -69,10 +72,10 @@ public class ContactsListActivity extends ListActivity implements OnItemClickLis
 
 					public void onClick(DialogInterface dialog, int which) {
 
-						mainApp.remove(mainApp.getVecContactsID().get(lastSelectedItem).getId());
-						mainApp.getVecContactsID().remove(lastSelectedItem);
+						mainApp.removeContactFromDB(mainApp.getListContactsID().get(lastSelectedItem).getId());
+						mainApp.getListContactsID().remove(lastSelectedItem);
 						lastSelectedItem = -1;
-						ContactsListActivity.this.setListAdapter(new ArrayAdapter<String>(ContactsListActivity.this, android.R.layout.simple_list_item_1, getList()));  
+						ContactsActivity.this.setListAdapter(new ArrayAdapter<String>(ContactsActivity.this, android.R.layout.simple_list_item_1, getList()));  
 					}
 
 				})
@@ -95,7 +98,7 @@ public class ContactsListActivity extends ListActivity implements OnItemClickLis
 	}
 
 	private String[] getList() {
-		Vector<MyContacts> vec = mainApp.getVecContactsID();
+		List<MyContacts> vec = mainApp.getListContactsID();
 
 		if(vec.size() == 0)
 			return new String[]{"Seznam prejemnikov je prazen, dodajte prejemnika!"};
@@ -114,7 +117,7 @@ public class ContactsListActivity extends ListActivity implements OnItemClickLis
 
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		System.out.println("CLICK");
-		if(mainApp.getVecContactsID().size() == 0) {
+		if(mainApp.getListContactsID().size() == 0) {
 			Intent intent = new Intent(Intent.ACTION_PICK, Contacts.CONTENT_URI);
 			startActivityForResult(intent, CONTACTS_REQ);
 		} else {	
@@ -146,15 +149,16 @@ public class ContactsListActivity extends ListActivity implements OnItemClickLis
 		if(cursor.moveToFirst()) {
 			boolean exists = false;
 			String contactId = cursor.getString(cursor.getColumnIndex(Contacts._ID)); 
-			for(int i = 0; i < mainApp.getVecContactsID().size(); i++) 
-				if(mainApp.getVecContactsID().get(i).getContactID().equalsIgnoreCase(contactId)) {
+			for(int i = 0; i < mainApp.getListContactsID().size(); i++) 
+				if(mainApp.getListContactsID().get(i).getContactID().equalsIgnoreCase(contactId)) {
 					exists = true;
 					break;
 				}
 
 			if(!exists) {
-				mainApp.getVecContactsID().add(new MyContacts(contactId));
-				mainApp.addDBRezultat(mainApp.getVecContactsID().lastElement());
+				mainApp.getListContactsID().add(new MyContacts(contactId));
+				int size = mainApp.getListContactsID().size();
+				mainApp.addContactToDB(mainApp.getListContactsID().get(size - 1));
 			}
 
 		}

@@ -1,6 +1,4 @@
-package edu.feri.jager.SOSLokator.database;
-
-import edu.feri.jager.SOSLokator.MyContacts;
+package edu.feri.jager.SOSLokator.databases;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,22 +7,24 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
-public class DBAdapterContacts implements BaseColumns {
+import edu.feri.jager.SOSLokator.structures.MyContacts;
+
+public class ContactsDBAdapter implements BaseColumns {
 	public static final  String CONTACT_ID = "contactID";
 	public static final  int POS__ID = 0;
 	public static final  int POS_CONTACT_ID = 1;
 	public static final  String TABLE = "contactsID";
 
 	private final Context context;
-	private DatabaseHelper DBHelper;
+	private ContactsDBHelper DBHelper;
 	private SQLiteDatabase db;
 
-	public DBAdapterContacts(Context ctx) {
+	public ContactsDBAdapter(Context ctx) {
 		this.context = ctx;
-		DBHelper = new DatabaseHelper(context);
+		DBHelper = new ContactsDBHelper(context);
 	}
 
-	public DBAdapterContacts open() throws SQLException {
+	public ContactsDBAdapter open() throws SQLException {
 		db = DBHelper.getWritableDatabase();
 		return this;
 	}
